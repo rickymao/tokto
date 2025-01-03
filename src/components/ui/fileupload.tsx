@@ -82,6 +82,7 @@ export const FileUploadCard: React.FC<FileUploadCardProps> = ({
         >
           <input
             type="file"
+            accept=".pdf,application/pdf"
             id="file-upload"
             className="hidden"
             onChange={handleChange}
