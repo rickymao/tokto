@@ -1,5 +1,6 @@
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { ChatOpenAI } from "@langchain/openai";
+import { ChatOllama } from "@langchain/ollama";
+
 import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
@@ -26,10 +27,11 @@ const embeddings = new OpenAIEmbeddings({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
   model: "text-embedding-3-large",
 });
-const llm = new ChatOpenAI({
-  model: "gpt-4o-mini",
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+const llm = new ChatOllama({
+  model: "llama3",
   temperature: 0,
+  maxRetries: 2,
+  // other params...
 });
 const vectorStore = new MemoryVectorStore(embeddings);
 
@@ -194,14 +196,31 @@ self.addEventListener(
     console.log("Worker received:", event.data);
     if (event.data.type === "INGEST") {
       const file = event.data.payload.data;
-      await ingestData(file);
+      try {
+        await ingestData(file);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        self.postMessage({
+          type: "ERROR",
+          payload: { error: e.message },
+        });
+      }
       self.postMessage({
         type: "INGEST_DONE",
       });
     } else if (event.data.type === "CHAT") {
       const messages = event.data.payload.messages;
       const systemPrompt = event.data.payload.systemPrompt;
-      await runRag(messages, systemPrompt);
+      try {
+        
+        await runRag(messages, systemPrompt);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        self.postMessage({
+          type: "ERROR",
+          payload: { error: e.message },
+        });
+      }
       self.postMessage({
         type: "DONE",
       });

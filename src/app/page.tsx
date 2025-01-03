@@ -49,6 +49,8 @@ export default function Home() {
       setGeneratedQuery(data.payload.query);
     } else if (data.type === "DONE") {
       setIsLoadingMessage(false);
+    } else if (data.type === "ERROR") {
+      console.error(data.payload.error);
     }
   };
 
