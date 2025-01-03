@@ -15,16 +15,26 @@ import {
 } from "./accordion";
 import { DocumentCard } from "./documentcard";
 import { PromptCard } from "./promptcard";
+import { Info } from "lucide-react";
+import { Document } from "@langchain/core/documents";
 
 type AppSidebarProps = {
   handleFileUpload: (file: File) => void;
   file: File | null;
   isFileLoading: boolean;
+  systemPrompt: string;
+  query: string;
+  docs: Document[];
+  setSystemPrompt: (prompt: string) => void;
 };
 export const AppSidebar: React.FC<AppSidebarProps> = ({
   handleFileUpload,
   isFileLoading,
+  docs,
   file,
+  systemPrompt,
+  query,
+  setSystemPrompt,
 }) => {
   return (
     <Sidebar className="z-20 border-r-2 border-stone-700">
@@ -44,30 +54,43 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
           <SidebarGroupLabel>Debug</SidebarGroupLabel>
           <SidebarGroupContent>
             <Accordion type="multiple" className="w-full">
-            <AccordionItem value="query">
+              <AccordionItem value="query">
                 <AccordionTrigger>Query Generated</AccordionTrigger>
                 <AccordionContent>
-                  <PromptCard disabled />
+                  <PromptCard content={query} disabled />
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="retrieved_docs">
                 <AccordionTrigger>Retrieved Documents</AccordionTrigger>
                 <AccordionContent>
-                  <DocumentCard id="1" />
-                  <DocumentCard id="2" />
-                  <DocumentCard id="3" />
+                  {docs.map((doc, i) => {
+                    return <DocumentCard key={i} id={i} doc={doc} />;
+                  })}
+                  {docs.length === 0 && (
+                    <p className="py-4 text-sm text-sidebar-foreground/40 flex flex-row gap-2">
+                      No documents found. Try sending a new message.
+                    </p>
+                  )}
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="System Prompt">
+              <AccordionItem value="system_prompt">
                 <AccordionTrigger>System Prompt</AccordionTrigger>
                 <AccordionContent>
-                  <PromptCard />
+                  <PromptCard
+                    content={systemPrompt}
+                    className="h-[10rem]"
+                    handleChange={setSystemPrompt}
+                  />
+                  <p className="py-4 text-sm text-sidebar-foreground/40 flex flex-row gap-2">
+                    <Info />
+                    the prompt updates when a message is sent.
+                  </p>
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="item-3">
+              <AccordionItem value="sample_questions">
                 <AccordionTrigger>Sample Questions</AccordionTrigger>
                 <AccordionContent>
-                  Yes. It's animated by default, but you can disable it if you
+                  Yes. Its animated by default, but you can disable it if you
                   prefer.
                 </AccordionContent>
               </AccordionItem>

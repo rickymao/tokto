@@ -10,15 +10,26 @@ import { AppSidebar } from "@/components/ui/appsidebar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Send } from "lucide-react";
+import { Document } from "@langchain/core/documents";
 
 export default function Home() {
   const workerRef = useRef<Worker | null>(null);
   const [isFileLoading, setIsFileLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [inputValue, setInputValue] = useState<string>("");
+  const [generatedQuery, setGeneratedQuery] = useState<string | null>(null);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [docs, setDocs] = useState<Document[]>([]);
+  const [systemPrompt, setSystemPrompt] = useState<string>(
+    "You are an assistant for question-answering tasks. " +
+      "Use the following pieces of retrieved context to answer " +
+      "the question. If you don't know the answer, say that you " +
+      "don't know. Use three sentences maximum and keep the " +
+      "answer concise."
+  );
 
   const handleWorkerMessage = ({ data }: MessageEvent<WorkerOutMessage>) => {
+    console.log("Worker received:", data);
     if (data.type === "TOKEN") {
       const msg = data as WorkerOutMessageToken;
       setChatMessages((prev) => {
@@ -31,6 +42,10 @@ export default function Home() {
       });
     } else if (data.type === "INGEST_DONE") {
       setIsFileLoading(false);
+    } else if (data.type === "DOC") {
+      setDocs(data.payload.docs);
+    } else if (data.type === "QUERY") {
+      setGeneratedQuery(data.payload.query);
     }
   };
 
@@ -63,7 +78,9 @@ export default function Home() {
       );
       workerRef.current.postMessage({
         type: "CHAT",
-        payload: { messages: [message] },
+        payload: { messages: [message], 
+        systemPrompt,
+         },
       });
     }
   };
@@ -73,7 +90,11 @@ export default function Home() {
       <AppSidebar
         handleFileUpload={handleFileUpload}
         file={file}
+        docs={docs}
+        query={generatedQuery ?? "No query generated yet"}
         isFileLoading={isFileLoading}
+        systemPrompt={systemPrompt}
+        setSystemPrompt={setSystemPrompt}
       />
       <main className="flex flex-col w-full h-svh">
         <div className="flex flex-col h-svh">
@@ -97,7 +118,9 @@ export default function Home() {
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Type a message..."
                 />
-                <Button onClick={() => onSubmit()}><Send/></Button>
+                <Button onClick={() => onSubmit()}>
+                  <Send />
+                </Button>
               </CardContent>
             </Card>
           </div>

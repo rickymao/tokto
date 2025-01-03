@@ -37,21 +37,21 @@ const vectorStore = new MemoryVectorStore(embeddings);
 const trimmer = trimMessages({
   maxTokens: 100000,
   strategy: "last",
-  tokenCounter: (msgs) => msgs.length,
+  tokenCounter: llm,
   includeSystem: true,
   allowPartial: false,
-  startOn: "human",
 });
 
 // RAG Implementation: Ingest data, create RAG, and respond to messages
 async function ingestData(blob: Blob) {
-  const chunkSize = 1000;
-  const chunkOverlap = 200;
-  const pdfLoader = new WebPDFLoader(blob);
+  const chunkSize = 750;
+  const chunkOverlap = 100;
+  const pdfLoader = new WebPDFLoader(blob, { parsedItemSeparator: "  " });
   const docs = await pdfLoader.load();
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize,
     chunkOverlap,
+    separators: ["○", "●", ">", "-"],
   });
   const chunks = await splitter.splitDocuments(docs);
 
@@ -67,6 +67,7 @@ const StateAnnotation = Annotation.Root({
   }),
   docs: Annotation<Document[]>,
   query: Annotation<string>,
+  systemPrompt: Annotation<string>,
 });
 
 // create query node
@@ -78,7 +79,7 @@ const createQuery = async (
   const lastHumanMessage = state.messages[state.messages.length - 1];
 
   // combine context from last 5 messages
-  const lastMessages = await trimmer.invoke(state.messages);
+  const lastMessages = state.messages.slice(-5);
   const context = lastMessages
     .map((m) => {
       return `${m.getType() === "ai" ? "Assistant" : "User"}: ${m.content}`;
@@ -94,6 +95,11 @@ const createQuery = async (
   });
 
   const resp = await llm.invoke(prompt, config);
+
+  self.postMessage({
+    type: "QUERY",
+    payload: { query: resp.content },
+  });
   return { query: resp.content };
 };
 
@@ -103,8 +109,12 @@ const retrieve = async (
   config: RunnableConfig
 ) => {
   const query = state.query;
-  const retriever = await vectorStore.asRetriever();
+  const retriever = await vectorStore.asRetriever(3);
   const docs = await retriever.invoke(query, config);
+  self.postMessage({
+    type: "DOC",
+    payload: { docs },
+  });
   return { docs };
 };
 // generate node
@@ -120,14 +130,7 @@ const generate = async (
     context: string;
     messages: BaseMessage[];
   }>([
-    [
-      "system",
-      "You are an assistant for question-answering tasks. " +
-        "Use the following pieces of retrieved context to answer " +
-        "the question. If you don't know the answer, say that you " +
-        "don't know. Use three sentences maximum and keep the " +
-        "answer concise.",
-    ],
+    ["system", state.systemPrompt ?? ""],
     [
       "user",
       "use the following documents as context:\n<context>\n{context}\n</context>",
@@ -162,10 +165,11 @@ const graphBuilder = new StateGraph(StateAnnotation)
 
 const rag = graphBuilder.compile({ checkpointer: memory });
 
-const runRag = async (messages: BaseMessage[]) => {
+const runRag = async (messages: BaseMessage[], systemPrompt: string) => {
   const eventStream = await rag.streamEvents(
     {
-      messages: [new HumanMessage(messages[0].content.toString())], //TODO: cleaner way to do this
+      messages: [new HumanMessage(messages[0].content.toString())],
+      systemPrompt,
     },
     {
       version: "v2",
@@ -196,7 +200,8 @@ self.addEventListener(
       });
     } else if (event.data.type === "CHAT") {
       const messages = event.data.payload.messages;
-      await runRag(messages);
+      const systemPrompt = event.data.payload.systemPrompt;
+      await runRag(messages, systemPrompt);
     }
   }
 );
