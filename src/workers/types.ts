@@ -54,6 +54,10 @@ export interface WorkerOutMessageLog {
   };
 }
 
+export interface WorkerOutMessageDone {
+  type: "DONE";
+}
+
 export interface WorkerOutMessageError {
   type: "ERROR";
   payload: {
@@ -70,4 +74,5 @@ export type WorkerOutMessage =
   | WorkerOutMessageError
   | WorkerOutMessageIngestDone
   | WorkerOutMessageDoc
-  | WorkerOutMessageQuery;
+  | WorkerOutMessageQuery
+  | WorkerOutMessageDone;

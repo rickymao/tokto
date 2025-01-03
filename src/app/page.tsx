@@ -17,6 +17,7 @@ export default function Home() {
   const [isFileLoading, setIsFileLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [inputValue, setInputValue] = useState<string>("");
+  const [isLoadingMessage, setIsLoadingMessage] = useState<boolean>(false);
   const [generatedQuery, setGeneratedQuery] = useState<string | null>(null);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [docs, setDocs] = useState<Document[]>([]);
@@ -46,6 +47,8 @@ export default function Home() {
       setDocs(data.payload.docs);
     } else if (data.type === "QUERY") {
       setGeneratedQuery(data.payload.query);
+    } else if (data.type === "DONE") {
+      setIsLoadingMessage(false);
     }
   };
 
@@ -83,6 +86,15 @@ export default function Home() {
          },
       });
     }
+    setIsLoadingMessage(true);
+    setInputValue("");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
   };
 
   return (
@@ -115,10 +127,11 @@ export default function Home() {
                 <Textarea
                   className="bg-stone-700 h-full w-full border-0 resize-none"
                   value={inputValue}
+                  onKeyDown={handleKeyDown}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Type a message..."
                 />
-                <Button onClick={() => onSubmit()}>
+                <Button disabled={isLoadingMessage} onClick={() => onSubmit()}>
                   <Send />
                 </Button>
               </CardContent>

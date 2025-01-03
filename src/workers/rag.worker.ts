@@ -202,6 +202,9 @@ self.addEventListener(
       const messages = event.data.payload.messages;
       const systemPrompt = event.data.payload.systemPrompt;
       await runRag(messages, systemPrompt);
+      self.postMessage({
+        type: "DONE",
+      });
     }
   }
 );
