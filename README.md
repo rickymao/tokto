@@ -1,3 +1,5 @@
+# tokto: local chatbot for your documents
+
 ## Setup
 
 ### Prerequisites
