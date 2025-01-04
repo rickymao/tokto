@@ -58,7 +58,7 @@ The application should now be ready for use. Visit http://localhost:3000 to view
 
 Note: the first message will take a bit of time to generate when you use Ollama, but subsequent messages will be much faster.
 
-### Usage
+## Demo
 
 Here's a [quick demo]() on using tokto and an overview of the features.
 
