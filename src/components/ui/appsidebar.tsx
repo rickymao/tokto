@@ -90,8 +90,29 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
               <AccordionItem value="sample_questions">
                 <AccordionTrigger>Sample Questions</AccordionTrigger>
                 <AccordionContent>
-                  Yes. Its animated by default, but you can disable it if you
-                  prefer.
+                  <ol className="list-decimal list-inside py-4 text-sm">
+                    <li>
+                      What are Crista{"'"}s Five Laws of Performant Software?
+                    </li>
+                    <li>
+                      What is the maximum latency recommended for systems that
+                      need to respond instantaneously
+                    </li>
+                    <li>
+                      How does the document explain the difference between
+                      bandwidth and latency?
+                    </li>
+                    <li>
+                      {" "}
+                      According to the lecture, why is parallelization not
+                      always the answer to performance problems?
+                    </li>
+                    <li>
+                      What was the specific problem mentioned in the anecdote
+                      about report generation taking three hours, and how was it
+                      solved?
+                    </li>
+                  </ol>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
