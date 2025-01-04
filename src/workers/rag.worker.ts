@@ -67,9 +67,11 @@ async function ingestData(blob: Blob) {
     chunkOverlap,
     separators: ["○", "●", ">", "-"],
   });
+
   const chunks = await splitter.splitDocuments(docs);
 
-  await vectorStore.addDocuments(chunks);
+  const test = await vectorStore.addDocuments(chunks);
+  console.log(test);
 }
 
 // create state schema
@@ -209,12 +211,18 @@ self.addEventListener(
     if (event.data.type === "INGEST") {
       const file = event.data.payload.data;
       try {
+        await llm.invoke("hello"); // fix for Ollama check
         await ingestData(file);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         self.postMessage({
           type: "ERROR",
-          payload: { error: e.message },
+          payload: {
+            error:
+              process.env.NEXT_PUBLIC_OPENAI_API_KEY === "true"
+                ? e.message.replace("Couldn't ingest data. OpenAI API key is missing.", "")
+                : "Couldn't ingest data. Check if Ollama is running.",
+          },
         });
       }
       self.postMessage({
@@ -232,8 +240,8 @@ self.addEventListener(
           payload: {
             error:
               process.env.NEXT_PUBLIC_OPENAI_API_KEY === "true"
-                ? e.message.replace("OpenAI API key is missing.", "")
-                : "Check if Ollama is running.",
+                ? e.message.replace("Couldn't run RAG.OpenAI API key is missing.", "")
+                : "Couldn't run RAG. Check if Ollama is running.",
           },
         });
       }

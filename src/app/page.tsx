@@ -25,7 +25,7 @@ export default function Home() {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [docs, setDocs] = useState<Document[]>([]);
   const [systemPrompt, setSystemPrompt] = useState<string>(
-    "You are an assistant for question-answering tasks. " +
+    "You are an assistant for question-answering tasks about PDF documents." +
       "Use the following pieces of retrieved context to answer " +
       "the question. If you don't know the answer, say that you " +
       "don't know. Use three sentences maximum and keep the " +
