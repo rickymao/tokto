@@ -85,7 +85,7 @@ Before I explain the choices I made, I want to list the stretch goals that influ
 2. features for debugging and tracing the RAG pipeline.
 3. I wanted to do the whole chatbot locally
 
-I was motivated to choose those stretch goals because I am interested in the observability and interpretability of RAG pipelines,and I wanted to build a chatbot that I wished I had when I was in University and the WiFi didn't work :(
+I was motivated to choose those stretch goals because I am interested in the observability and interpretability of RAG pipelines,and I wanted to build a chatbot that I wished I had when I was in University and the WiFi didn't work 🙁
 
 ## Tool Choices
 
