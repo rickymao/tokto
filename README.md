@@ -63,6 +63,16 @@ Feel free to jump right in, and try it out with the included `use-this-pdf.pdf` 
 
 Note: the first message will take a bit of time to generate when you use Ollama, but subsequent messages will be much faster.
 
+## Sample Q&A
+
+| Question | Answer |
+|----------|---------|
+| What are Crista's Five Laws of Performant Software? | Crista Videira Lopes' Five Laws of Performant Software are: 1. Programming language ≪ Programmers' awareness of performance. 2. The best tool is the one you will use. 3. The best programmer is the one who can write the code that the best tool will be used with. 4. The best architecture is the one that is designed for the tools and programmers you have. 5. The best design is the one that is done by people who understand both the problem domain and the technology. These laws aim to provide a set of guidelines for writing efficient and scalable software, rather than relying on specific programming languages or technologies. |
+| What is the maximum latency recommended for systems that need to respond instantaneously? | According to the context, 100ms (0.1 seconds) is the maximum recommended latency for systems that purport to respond instantaneously, as stated by Jakob Nielsen in his article "Response times: The 3 important limits" from January 1993. |
+| How does the document explain the difference between bandwidth and latency? | The document explains the difference between bandwidth and latency through an example of various communications technologies, such as high latency and high bandwidth. It states that while both can be present in a system, they serve different purposes: "We will focus on completing the items (doing useful work), not on transmitting information..." This implies that bandwidth is about transmitting information, whereas latency is about the time it takes to complete tasks or respond to users. |
+| According to the lecture, why is parallelization not always the answer to performance problems? | According to the context, parallelization is not always the answer because of "dependencies" and "coordination overhead". Specifically, a task can't start processing until it knows what it's supposed to process, and combining results from multiple tasks can be difficult. |
+| What was the specific problem mentioned in the anecdote about report generation taking three hours, and how was it solved? | According to the context, the anecdote mentions a report generation task that took three hours, but was actually only running for 30 minutes. The server had timed out the task due to reaching its time limit. |
+
 ## Demo
 
 Here's a [quick demo]() on using tokto and an overview of the features.
@@ -75,7 +85,7 @@ Before I explain the choices I made, I want to list the stretch goals that influ
 2. features for debugging and tracing the RAG pipeline.
 3. I wanted to do the whole chatbot locally
 
-I was motivated to choose those stretch goals because I am interested in the observability and interpretability of RAG pipelines,and I wanted to build a chatbot that I wished I had when I was in University and the WiFi didn't work :(
+I was motivated to choose those stretch goals because I am interested in the observability and interpretability of RAG pipelines,and I wanted to build a chatbot that I wished I had when I was in University and the WiFi didn't work 🙁
 
 ## Tool Choices
 
