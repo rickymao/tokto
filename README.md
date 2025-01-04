@@ -3,23 +3,23 @@
 ### Prerequisites
 
 1. Node.js
-
    - Required version: Node.js 18.x or higher recommended
    - Download from [nodejs.org](https://nodejs.org/)
 
 2. Yarn Package Manager
-
    - Required since the project uses a yarn.lock file
    - Install using: `npm install -g yarn`
 
 3. Ollama and Llama3.2 3B and nomic-embed-text
-
    - Required for running the RAG pipeline
    - Download the latest version from [ollama.ai](https://ollama.ai/)
    - Follow the installation instructions for your operating system
    - Make sure Ollama is downloaded properly by running `ollama -v` in your terminal
    - Download [Llama3.2 3B](https://ollama.com/library/llama3.2)
    - Download [nomic-embed-text](https://ollama.com/library/nomic-embed-text)
+  
+4. Git
+   - Download from [git](https://git-scm.com/)
 
 ### Setup Steps
 
@@ -38,8 +38,12 @@
 
 3. Environment Variables
 fill out the .env.development file with your own values if you want to use OpenAI
+```
+   NEXT_PUBLIC_USE_OPENAI=false # set this as 'true' to use OpenAI
+   NEXT_PUBLIC_OPENAI_API_KEY= # also set this if you want to use OpenAI
+```
 
-4. Run the development server
+5. Run the development server
 
    ```bash
    yarn dev
@@ -48,7 +52,7 @@ fill out the .env.development file with your own values if you want to use OpenA
    This will start the Next.js development server, typically on http://localhost:3000
 
 
-5. Open Ollama by running `ollama serve` in your terminal
+6. Open Ollama by running `ollama serve` in your terminal
 
 The application should now be ready for use. Visit http://localhost:3000 to view the application.
 
