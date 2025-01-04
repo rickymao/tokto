@@ -62,6 +62,8 @@ Note: the first message will take a bit of time to generate when you use Ollama,
 
 Here's a [quick demo]() on using tokto and an overview of the features.
 
+However, feel free to jump right in, and try it out with the included a PDF file from a cool class I took.
+
 ## Stretch Goals
 
 Before I explain the choices I made, I want to list the stretch goals that influenced my decisions:
