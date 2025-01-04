@@ -58,6 +58,10 @@ The application should now be ready for use. Visit http://localhost:3000 to view
 
 Note: the first message will take a bit of time to generate when you use Ollama, but subsequent messages will be much faster.
 
+### Usage
+
+Here's a [quick demo]() on using tokto and an overview of the features.
+
 ## Stretch Goals
 
 Before I explain the choices I made, I want to list the stretch goals that influenced my decisions:
