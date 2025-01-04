@@ -71,7 +71,6 @@ async function ingestData(blob: Blob) {
   const chunks = await splitter.splitDocuments(docs);
 
   const test = await vectorStore.addDocuments(chunks);
-  console.log(test);
 }
 
 // create state schema
@@ -194,7 +193,6 @@ const runRag = async (messages: BaseMessage[], systemPrompt: string) => {
     }
   );
   for await (const { event, data, tags } of eventStream) {
-    console.log("Event:", event, "Data:", data);
     if (tags && tags.includes("generate") && event === "on_chat_model_stream") {
       self.postMessage({
         type: "TOKEN",
@@ -207,7 +205,6 @@ const runRag = async (messages: BaseMessage[], systemPrompt: string) => {
 self.addEventListener(
   "message",
   async (event: MessageEvent<WorkerInMessage>) => {
-    console.log("Worker received:", event.data);
     if (event.data.type === "INGEST") {
       const file = event.data.payload.data;
       try {

@@ -33,7 +33,6 @@ export default function Home() {
   );
 
   const handleWorkerMessage = ({ data }: MessageEvent<WorkerOutMessage>) => {
-    console.log("Worker received:", data);
     if (data.type === "TOKEN") {
       const msg = data as WorkerOutMessageToken;
       setChatMessages((prev) => {
@@ -74,7 +73,6 @@ export default function Home() {
 
     const fileblob = new Blob([file], { type: "application/pdf" });
     if (workerRef.current) {
-      console.log("Sending file to worker");
       workerRef.current.postMessage({
         type: "INGEST",
         payload: { data: fileblob },
