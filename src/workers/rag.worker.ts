@@ -68,7 +68,10 @@ async function ingestData(blob: Blob) {
     separators: ["○", "●", ">", "-"],
   });
 
-  const chunks = await splitter.splitDocuments(docs);}
+  const chunks = await splitter.splitDocuments(docs);
+
+  await vectorStore.addDocuments(chunks);
+}
 
 // create state schema
 const StateAnnotation = Annotation.Root({
@@ -214,7 +217,10 @@ self.addEventListener(
           payload: {
             error:
               process.env.NEXT_PUBLIC_OPENAI_API_KEY === "true"
-                ? e.message.replace("Couldn't ingest data. OpenAI API key is missing.", "")
+                ? e.message.replace(
+                    "Couldn't ingest data. OpenAI API key is missing.",
+                    ""
+                  )
                 : "Couldn't ingest data. Check if Ollama is running.",
           },
         });
@@ -234,7 +240,10 @@ self.addEventListener(
           payload: {
             error:
               process.env.NEXT_PUBLIC_OPENAI_API_KEY === "true"
-                ? e.message.replace("Couldn't run RAG.OpenAI API key is missing.", "")
+                ? e.message.replace(
+                    "Couldn't run RAG.OpenAI API key is missing.",
+                    ""
+                  )
                 : "Couldn't run RAG. Check if Ollama is running.",
           },
         });
