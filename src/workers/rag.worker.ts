@@ -68,10 +68,7 @@ async function ingestData(blob: Blob) {
     separators: ["○", "●", ">", "-"],
   });
 
-  const chunks = await splitter.splitDocuments(docs);
-
-  const test = await vectorStore.addDocuments(chunks);
-}
+  const chunks = await splitter.splitDocuments(docs);}
 
 // create state schema
 const StateAnnotation = Annotation.Root({
