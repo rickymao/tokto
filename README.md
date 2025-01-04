@@ -76,7 +76,7 @@ the below table responses are from Llama3.2 3B.
 
 ## Demo
 
-Here's a [quick demo]([https://www.loom.com/share/d5412cb206f041b7b193e1c86495c807?sid=2114bf14-507e-4102-9ee8-c24efc643630](https://www.loom.com/share/b20e484f305c4de7947fdb1a0a5f93ae?sid=f3a30e64-66cd-4a62-af04-5d0ae29c2464) on using tokto and an overview of the features.
+Here's a [quick demo](https://www.loom.com/share/b20e484f305c4de7947fdb1a0a5f93ae?sid=f3a30e64-66cd-4a62-af04-5d0ae29c2464) on using tokto and an overview of the features.
 
 ## Stretch Goals
 
