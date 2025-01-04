@@ -65,6 +65,7 @@ Note: the first message will take a bit of time to generate when you use Ollama,
 
 ## Sample Q&A
 
+the below table responses are from Llama3.2 3B.
 | Question | Answer |
 |----------|---------|
 | What are Crista's Five Laws of Performant Software? | Crista Videira Lopes' Five Laws of Performant Software include: 1. Programming language ≪ Programmers' awareness of performance. 2. Performance improvements = log(controlled experiments). 3. N*bad != good (No amount of nodes, cores, memory, etc., will save you from poorly written code). The other two laws are not explicitly mentioned in the provided context, but they can be inferred based on general knowledge about Crista's Five Laws of Performant Software. If you need more information, please let me know and I'll try to find it for you. |
