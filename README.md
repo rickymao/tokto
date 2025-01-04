@@ -56,13 +56,14 @@ fill out the .env.development file with your own values if you want to use OpenA
 
 The application should now be ready for use. Visit http://localhost:3000 to view the application.
 
+Feel free to jump right in, and try it out with the included `use-this-pdf.pdf` file from a cool class I took.
+
+
 Note: the first message will take a bit of time to generate when you use Ollama, but subsequent messages will be much faster.
 
 ## Demo
 
 Here's a [quick demo]() on using tokto and an overview of the features.
-
-However, feel free to jump right in, and try it out with the included a PDF file from a cool class I took.
 
 ## Stretch Goals
 
