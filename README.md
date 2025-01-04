@@ -75,7 +75,7 @@ Note: the first message will take a bit of time to generate when you use Ollama,
 
 ## Demo
 
-Here's a [quick demo]() on using tokto and an overview of the features.
+Here's a [quick demo](https://www.loom.com/share/d5412cb206f041b7b193e1c86495c807?sid=2114bf14-507e-4102-9ee8-c24efc643630) on using tokto and an overview of the features.
 
 ## Stretch Goals
 
