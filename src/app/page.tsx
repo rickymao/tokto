@@ -11,8 +11,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Send } from "lucide-react";
 import { Document } from "@langchain/core/documents";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
+  const { toast } = useToast();
   const workerRef = useRef<Worker | null>(null);
   const [isFileLoading, setIsFileLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -51,6 +54,10 @@ export default function Home() {
       setIsLoadingMessage(false);
     } else if (data.type === "ERROR") {
       console.error(data.payload.error);
+      toast({
+        title: "Error",
+        description: data.payload.error,
+      });
     }
   };
 
@@ -83,9 +90,7 @@ export default function Home() {
       );
       workerRef.current.postMessage({
         type: "CHAT",
-        payload: { messages: [message], 
-        systemPrompt,
-         },
+        payload: { messages: [message], systemPrompt },
       });
     }
     setIsLoadingMessage(true);
@@ -93,7 +98,7 @@ export default function Home() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       onSubmit();
     }
@@ -101,6 +106,7 @@ export default function Home() {
 
   return (
     <SidebarProvider>
+      <Toaster />
       <AppSidebar
         handleFileUpload={handleFileUpload}
         file={file}

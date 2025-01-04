@@ -1,6 +1,6 @@
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { ChatOllama } from "@langchain/ollama";
-
+import { ChatOllama, OllamaEmbeddings } from "@langchain/ollama";
+import { ChatOpenAI } from "@langchain/openai";
 import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
@@ -23,16 +23,28 @@ import { Document } from "@langchain/core/documents";
 // Initialize vector store, embeddings, and language model
 
 const currentChatID = self.crypto.randomUUID();
-const embeddings = new OpenAIEmbeddings({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-  model: "text-embedding-3-large",
-});
-const llm = new ChatOllama({
-  model: "llama3",
-  temperature: 0,
-  maxRetries: 2,
-  // other params...
-});
+const embeddings =
+  process.env.NEXT_PUBLIC_USE_OPENAI === "true"
+    ? new OpenAIEmbeddings({
+        apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+        model: "text-embedding-3-large",
+      })
+    : new OllamaEmbeddings({
+        model: "nomic-embed-text",
+      });
+const llm =
+  process.env.NEXT_PUBLIC_USE_OPENAI === "true"
+    ? new ChatOpenAI({
+        apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+        modelName: "gpt-4o",
+        temperature: 0.3, // for more factual responses
+        maxRetries: 2,
+      })
+    : new ChatOllama({
+        model: "llama3.2",
+        temperature: 0.3,
+        maxRetries: 2,
+      });
 const vectorStore = new MemoryVectorStore(embeddings);
 
 // init trimmer
@@ -198,7 +210,7 @@ self.addEventListener(
       const file = event.data.payload.data;
       try {
         await ingestData(file);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         self.postMessage({
           type: "ERROR",
@@ -212,13 +224,17 @@ self.addEventListener(
       const messages = event.data.payload.messages;
       const systemPrompt = event.data.payload.systemPrompt;
       try {
-        
         await runRag(messages, systemPrompt);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (e: any) {
         self.postMessage({
           type: "ERROR",
-          payload: { error: e.message },
+          payload: {
+            error:
+              process.env.NEXT_PUBLIC_OPENAI_API_KEY === "true"
+                ? e.message.replace("OpenAI API key is missing.", "")
+                : "Check if Ollama is running.",
+          },
         });
       }
       self.postMessage({
