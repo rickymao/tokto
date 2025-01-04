@@ -28,7 +28,7 @@ export default function Home() {
     "You are an assistant for question-answering tasks about PDF documents." +
       "Use the following pieces of retrieved context to answer " +
       "the question. If you don't know the answer, say that you " +
-      "don't know. Use three sentences maximum and keep the " +
+      "don't know. Use eight sentences maximum and keep the " +
       "answer concise."
   );
 

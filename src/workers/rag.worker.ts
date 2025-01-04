@@ -59,7 +59,7 @@ const trimmer = trimMessages({
 // RAG Implementation: Ingest data, create RAG, and respond to messages
 async function ingestData(blob: Blob) {
   const chunkSize = 750;
-  const chunkOverlap = 100;
+  const chunkOverlap = 150;
   const pdfLoader = new WebPDFLoader(blob, { parsedItemSeparator: "  " });
   const docs = await pdfLoader.load();
   const splitter = new RecursiveCharacterTextSplitter({
@@ -125,7 +125,7 @@ const retrieve = async (
   config: RunnableConfig
 ) => {
   const query = state.query;
-  const retriever = await vectorStore.asRetriever(3);
+  const retriever = await vectorStore.asRetriever(4);
   const docs = await retriever.invoke(query, config);
   self.postMessage({
     type: "DOC",
