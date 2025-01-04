@@ -36,8 +36,7 @@
    yarn
    ```
 
-3. Environment Variables
-fill out the .env.development file with your own values if you want to use OpenAI
+3. Fill out the Environment Variables if needed
 ```
    NEXT_PUBLIC_USE_OPENAI=false # set this as 'true' to use OpenAI
    NEXT_PUBLIC_OPENAI_API_KEY= # also set this if you want to use OpenAI
@@ -48,8 +47,6 @@ fill out the .env.development file with your own values if you want to use OpenA
    ```bash
    yarn dev
    ```
-
-   This will start the Next.js development server, typically on http://localhost:3000
 
 
 5. Open Ollama by running `ollama serve` in your terminal
